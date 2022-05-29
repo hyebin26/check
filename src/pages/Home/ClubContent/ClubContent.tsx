@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import ClubDataType from "../../../types/clubDataType";
 import getClubData from "../../../api/getClubData";
@@ -9,26 +9,46 @@ export default function ClubContent() {
   const [clubData, setClubData] = useState<ClubDataType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const CURRETMAXDATA = 7;
+  const lastElementRef = useRef(null);
+  const CURRENTMAXDATA = 7;
+
   const onHandleClubData = async () => {
     const clubData = await getClubData();
-    const currentPageClubDataLength = currentPage * CURRETMAXDATA;
+    const currentPageClubDataLength = currentPage * CURRENTMAXDATA;
     setIsLoading(false);
     setClubData(clubData.slice(0, currentPageClubDataLength));
   };
+
+  useEffect(() => {
+    if (isLoading) return;
+    const option = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 0,
+    };
+    const observer = new IntersectionObserver((entries) => {
+      const target = entries[0];
+      if (target.isIntersecting) {
+        setCurrentPage((prev) => prev + 1);
+      }
+    }, option);
+    if (lastElementRef.current) observer.observe(lastElementRef.current);
+  }, [isLoading]);
+  
   useEffect(() => {
     onHandleClubData();
-  }, []);
+  }, [currentPage]);
   return (
     <>
       {!isLoading && (
         <StyledClubContainer>
           <h2>모든 클럽보기</h2>
           <StyledClubWrapper>
-            {clubData.map((item) => (
-              <ClubList clubData={item} />
+            {clubData.map((item, idx) => (
+              <ClubList clubData={item} key={idx} />
             ))}
           </StyledClubWrapper>
+          <div ref={lastElementRef}></div>
         </StyledClubContainer>
       )}
     </>
