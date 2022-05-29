@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from "react";
+import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
 import getClubData from "../../api/getClubData";
+import ClubDataType from "../../types/clubDataType";
 import Search from "./Search/Search";
+import ClubList from "./ClubList/ClubList";
+import ClubContent from "./ClubContent/ClubContent";
 
 function Home() {
-  const [clubData, setClubData] = useState([]);
-  const onHandleClubData = async () => {
-    const clubData = await getClubData();
-    setClubData(clubData);
-  };
-
-  useEffect(() => {
-    onHandleClubData();
-  }, []);
-
   return (
     <main>
       <Search />
-      <section>
-        <h2>나만의 클럽찾기</h2>
-        <ul>
-          <li></li>
-        </ul>
-      </section>
+      <ClubContent />
     </main>
   );
 }
