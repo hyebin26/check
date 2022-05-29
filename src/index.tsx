@@ -11,6 +11,9 @@ declare module "@emotion/react" {
       main: string;
       grey: string;
     };
+    size: {
+      xLarge: string;
+    };
   }
 }
 
