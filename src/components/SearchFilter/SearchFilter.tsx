@@ -75,6 +75,7 @@ const StyledSearchFilterListContainer = styled.div<{ active: boolean }>`
   top: 36px;
   padding: 1rem;
   left: 0;
+  background: white;
   box-shadow: rgb(0 0 0 / 16%) 0px 4px 10px;
   z-index: 999;
   .searchFilterBtnWrapper {

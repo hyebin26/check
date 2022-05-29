@@ -132,6 +132,8 @@ function Search() {
 
 const StyledSearchContainer = styled.section`
   padding: 1rem 2rem;
+  width: ${({ theme }) => theme.size.xLarge};
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
