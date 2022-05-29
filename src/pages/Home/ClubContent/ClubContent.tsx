@@ -4,23 +4,71 @@ import ClubDataType from "../../../types/clubDataType";
 import getClubData from "../../../api/getClubData";
 import styled from "@emotion/styled";
 import ClubList from "../ClubList/ClubList";
+import { useSearchParams } from "react-router-dom";
 
 export default function ClubContent() {
   const [clubData, setClubData] = useState<ClubDataType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
   const lastElementRef = useRef(null);
   const CURRENTMAXDATA = 7;
 
   const onHandleClubData = async () => {
-    const clubData = await getClubData();
-    const currentPageClubDataLength = currentPage * CURRENTMAXDATA;
+    const isExistedSearchParams =
+      searchParams.has("placeFilter") ||
+      searchParams.has("typeFilter") ||
+      searchParams.has("searchKeyword");
+    if (isExistedSearchParams) {
+      onFilterClubData();
+      setSearchParams(searchParams);
+    }
+    if (!isExistedSearchParams) {
+      const clubData = await getClubData();
+      const currentPageClubDataLength = currentPage * CURRENTMAXDATA;
+      setClubData(clubData.slice(0, currentPageClubDataLength));
+    }
     setIsLoading(false);
-    setClubData(clubData.slice(0, currentPageClubDataLength));
+  };
+
+  const onFilterClubData = async () => {
+    const clubData = await getClubData();
+    const searchParamsPlace = searchParams.get("placeFilter");
+    const searchParamsName = searchParams.get("searchKeyword");
+    const searchParamsType = searchParams.get("typeFilter");
+    let filteredClubData: ClubDataType[] = clubData;
+    if (searchParamsPlace) {
+      const placeSearchParams = searchParamsPlace
+        .split("%")
+        .filter((item) => item !== "")
+        .map((item) =>
+          item === "강남 아지트" || item === "안국 아지트"
+            ? item.replace(" 아지트", "")
+            : item
+        );
+      filteredClubData = filteredClubData.filter((item) =>
+        placeSearchParams.every((search) => item.club.place === search)
+      );
+    }
+    if (searchParamsType) {
+      const typeSearchParams = searchParamsType
+        .split("%")
+        .filter((item) => item !== "");
+      filteredClubData = filteredClubData.filter((item) =>
+        typeSearchParams.every((search) => item.club.type === search)
+      );
+    }
+    if (searchParamsName) {
+      filteredClubData = filteredClubData.filter((item) =>
+        item.club.name.includes(searchParamsName)
+      );
+    }
+    setClubData(filteredClubData.slice(0, currentPage * CURRENTMAXDATA));
   };
 
   useEffect(() => {
     if (isLoading) return;
+
     const option = {
       root: null,
       rootMargin: "20px",
@@ -34,10 +82,15 @@ export default function ClubContent() {
     }, option);
     if (lastElementRef.current) observer.observe(lastElementRef.current);
   }, [isLoading]);
-  
+
   useEffect(() => {
     onHandleClubData();
   }, [currentPage]);
+
+  useEffect(() => {
+    onFilterClubData();
+  }, [searchParams]);
+
   return (
     <>
       {!isLoading && (
