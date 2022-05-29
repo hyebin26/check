@@ -21,6 +21,10 @@ const style = css`
     cursor: pointer;
     color: inherit;
   }
+  button {
+    background: inherit;
+    cursor: pointer;
+  }
   li {
     list-style: none;
   }
