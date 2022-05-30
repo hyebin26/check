@@ -51,6 +51,7 @@ export default function Detail() {
                   <DetailMeeting
                     startedAt={item.startedAt}
                     order={item.order}
+                    key={item.order}
                   />
                 ))}
               </div>
