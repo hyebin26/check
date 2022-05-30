@@ -21,7 +21,7 @@ export default function ClubList({ clubData }: ClubList) {
       <Link to={`/clubs/${id}`}>
         <div className="clubListWrapper">
           <div>
-            <img src={coverUrl} alt={name} />
+            <img src={coverUrl} alt={name} loading="lazy" />
           </div>
           <div className="clubTitleWrapper">
             <h2>{name}</h2>
@@ -75,7 +75,7 @@ const StyledClubListContainer = styled.li`
   .clubPlaceWrapper {
     padding: 10px 20px;
     color: ${({ theme }) => theme.color.grey};
-    font-size: 12px;
+    font-size: 11px;
     .clubPlace {
       padding-right: 6px;
     }
