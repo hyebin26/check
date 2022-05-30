@@ -93,6 +93,11 @@ export default function ClubContent() {
 
   return (
     <>
+      {isLoading && (
+        <StyledLoadingContainer>
+          <h2>로딩중입니다. 잠시만 기다려주세요!</h2>
+        </StyledLoadingContainer>
+      )}
       {!isLoading && (
         <StyledClubContainer>
           <h2>모든 클럽보기</h2>
@@ -108,6 +113,11 @@ export default function ClubContent() {
     </>
   );
 }
+
+const StyledLoadingContainer = styled.div`
+  text-align: center;
+  padding-top: 100px;
+`;
 
 const StyledClubWrapper = styled.ul`
   display: grid;
