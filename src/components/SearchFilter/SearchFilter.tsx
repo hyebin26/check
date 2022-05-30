@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import SearchFilterList from "../SearchFilterList/SearchFilterList";
 
@@ -27,18 +27,15 @@ function SearchFilter({
     onClickFilterCloseBtn(title);
   };
 
-  const onClickFilterApplyBtn = () => {
-    // 해당 라우터에 맞는 정보를 불러오고
-    // 전체 색 변경 => url ?
-    onClickFilterCloseBtn(title);
-  };
-
   return (
     <StyledSearchFilterWrapper>
       <button className="searchFillterShowBtn" onClick={clickFilterShowBtn}>
         {title}
       </button>
       <StyledSearchFilterListContainer active={active}>
+        <button className="searchFilterCancelBtn" onClick={clickFilterCloseBtn}>
+          X
+        </button>
         <ul className="searchFilterListWrapper">
           {content.map((item) => (
             <SearchFilterList
@@ -49,20 +46,6 @@ function SearchFilter({
             />
           ))}
         </ul>
-        <div className="searchFilterBtnWrapper">
-          <button
-            className="searchFilterCancelBtn"
-            onClick={clickFilterCloseBtn}
-          >
-            취소
-          </button>
-          <button
-            className="searchFilterApplyBtn"
-            onClick={onClickFilterApplyBtn}
-          >
-            적용
-          </button>
-        </div>
       </StyledSearchFilterListContainer>
     </StyledSearchFilterWrapper>
   );
@@ -78,26 +61,16 @@ const StyledSearchFilterListContainer = styled.div<{ active: boolean }>`
   background: white;
   box-shadow: rgb(0 0 0 / 16%) 0px 4px 10px;
   z-index: 999;
-  .searchFilterBtnWrapper {
-    display: flex;
-    padding-top: 14px;
-    padding-bottom: 20px;
-    justify-content: flex-end;
-    .searchFilterApplyBtn {
-      background: ${({ theme }) => theme.color.main};
-      color: white;
-    }
-    .searchFilterCancelBtn {
-      color: black;
-      background: rgb(247, 247, 245);
-    }
-    button {
-      padding: 0.4rem;
-      margin-left: 0.5rem;
-      font-weight: 800;
-      border-radius: 5px;
-      font-size: 11px;
-    }
+  .searchFilterCancelBtn {
+    color: black;
+    position: absolute;
+    background: rgb(247, 247, 245);
+    padding: 0.4rem;
+    margin-left: 0.5rem;
+    border-radius: 5px;
+    font-size: 11px;
+    right: 8px;
+    top: 8px;
   }
 `;
 
