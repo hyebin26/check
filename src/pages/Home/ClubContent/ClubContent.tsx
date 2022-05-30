@@ -21,13 +21,13 @@ export default function ClubContent() {
       searchParams.has("searchKeyword");
     if (isExistedSearchParams) {
       onFilterClubData();
-      setSearchParams(searchParams);
     }
     if (!isExistedSearchParams) {
       const clubData = await getClubData();
       const currentPageClubDataLength = currentPage * CURRENTMAXDATA;
       setClubData(clubData.slice(0, currentPageClubDataLength));
     }
+    setSearchParams(searchParams);
     setIsLoading(false);
   };
 
@@ -47,7 +47,7 @@ export default function ClubContent() {
             : item
         );
       filteredClubData = filteredClubData.filter((item) =>
-        placeSearchParams.every((search) => item.club.place === search)
+        placeSearchParams.includes(item.club.place)
       );
     }
     if (searchParamsType) {
@@ -55,7 +55,7 @@ export default function ClubContent() {
         .split("%")
         .filter((item) => item !== "");
       filteredClubData = filteredClubData.filter((item) =>
-        typeSearchParams.every((search) => item.club.type === search)
+        typeSearchParams.includes(item.club.type)
       );
     }
     if (searchParamsName) {
@@ -100,6 +100,7 @@ export default function ClubContent() {
             {clubData.map((item, idx) => (
               <ClubList clubData={item} key={idx} />
             ))}
+            {clubData.length === 0 && <div>정보가 존재하지 않습니다.</div>}
           </StyledClubWrapper>
           <div ref={lastElementRef}></div>
         </StyledClubContainer>
