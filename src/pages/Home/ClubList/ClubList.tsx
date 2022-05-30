@@ -4,11 +4,11 @@ import styled from "@emotion/styled";
 import ClubDataType from "../../../types/clubDataType";
 import useDate from "../../../utils/useDate";
 
-type ClubList = {
+type ClubListType = {
   clubData: ClubDataType;
 };
 
-export default function ClubList({ clubData }: ClubList) {
+export default function ClubList({ clubData }: ClubListType) {
   const { name, description, coverUrl, id } = clubData.club;
   const place =
     clubData.club.place === "강남" || clubData.club.place === "안국"
