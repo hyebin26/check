@@ -37,9 +37,8 @@ function Search() {
       ],
     },
   ]);
-
-  const searchRef = useRef<HTMLInputElement | null>(null);
   let [searchParams, setSearchParams] = useSearchParams();
+  const searchRef = useRef<HTMLInputElement | null>(null);
 
   const onClickFilterShowBtn = (title: string) => {
     const filteredFilterCategory = filterCategory.map((item) => {
@@ -119,11 +118,7 @@ function Search() {
           <button>
             <img src="search.svg" alt="search" />
           </button>
-          <input
-            type="text"
-            placeholder="검색어를 입력하세요"
-            ref={searchRef}
-          />
+          <input type="text" placeholder="제목을 검색하세요." ref={searchRef} />
         </form>
       </div>
     </StyledSearchContainer>
