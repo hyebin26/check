@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useSearchParams } from "react-router-dom";
 
@@ -32,13 +32,22 @@ export default function SearchFilterList({
     }
     if (!currentIsActive) {
       const currentParams = searchParams.get(filter);
-      const hello = currentParams?.replace(`%${filterTitle}`, "");
+      const removedParamsFilterTitle = currentParams?.replace(
+        `%${filterTitle}`,
+        ""
+      );
       searchParams.delete(filter);
-      searchParams.append(filter, hello as string);
+      searchParams.append(filter, removedParamsFilterTitle as string);
     }
     setIsActive(currentIsActive);
     setSearchParams(searchParams);
   };
+
+  useEffect(() => {
+    if (!searchParams.has(filter) && isActive) {
+      setIsActive(false);
+    }
+  }, [searchParams]);
 
   return (
     <StyledFilterList>
