@@ -1,14 +1,14 @@
 import React from "react";
 import Home from "./pages/Home/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Clubs from "./pages/Clubs/Clubs";
+import Detail from "./pages/Detail/Detail";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/clubs/:clubId" element={<Clubs />} />
+        <Route path="/clubs/:clubId" element={<Detail />} />
       </Routes>
     </BrowserRouter>
   );
