@@ -15,19 +15,9 @@ export default function ClubContent() {
   const CURRENTMAXDATA = 7;
 
   const onHandleClubData = async () => {
-    const isExistedSearchParams =
-      searchParams.has("placeFilter") ||
-      searchParams.has("typeFilter") ||
-      searchParams.has("searchKeyword");
-    if (isExistedSearchParams) {
-      onFilterClubData();
-    }
-    if (!isExistedSearchParams) {
-      const clubData = await getClubData();
-      const currentPageClubDataLength = currentPage * CURRENTMAXDATA;
-      setClubData(clubData.slice(0, currentPageClubDataLength));
-    }
-    setSearchParams(searchParams);
+    const clubData = await getClubData();
+    const currentPageClubDataLength = currentPage * CURRENTMAXDATA;
+    setClubData(clubData.slice(0, currentPageClubDataLength));
     setIsLoading(false);
   };
 
@@ -37,6 +27,7 @@ export default function ClubContent() {
     const searchParamsName = searchParams.get("searchKeyword");
     const searchParamsType = searchParams.get("typeFilter");
     let filteredClubData: ClubDataType[] = clubData;
+
     if (searchParamsPlace) {
       const placeSearchParams = searchParamsPlace
         .split("%")
@@ -64,6 +55,7 @@ export default function ClubContent() {
       );
     }
     setClubData(filteredClubData.slice(0, currentPage * CURRENTMAXDATA));
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -84,12 +76,18 @@ export default function ClubContent() {
   }, [isLoading]);
 
   useEffect(() => {
-    onHandleClubData();
-  }, [currentPage]);
+    const isExistedSearchParams =
+      searchParams.has("placeFilter") ||
+      searchParams.has("typeFilter") ||
+      searchParams.has("searchKeyword");
 
-  useEffect(() => {
-    onFilterClubData();
-  }, [searchParams]);
+    if (isExistedSearchParams) {
+      onFilterClubData();
+    }
+    if (!isExistedSearchParams) {
+      onHandleClubData();
+    }
+  }, [currentPage, searchParams]);
 
   return (
     <>
