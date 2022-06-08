@@ -7,8 +7,9 @@ type SearchFilterType = {
   active: boolean;
   content: { contentId: number; filterTitle: string; info?: string }[];
   filter: string;
-  onClickFilterShowBtn: (title: string) => void;
-  onClickFilterCloseBtn: (title: string) => void;
+  id: number;
+  onClickFilterShowBtn: (id: number) => void;
+  onClickFilterCloseBtn: (id: number) => void;
 };
 
 function SearchFilter({
@@ -16,15 +17,16 @@ function SearchFilter({
   active,
   content,
   filter,
+  id,
   onClickFilterShowBtn,
   onClickFilterCloseBtn,
 }: SearchFilterType) {
   const clickFilterShowBtn = () => {
-    onClickFilterShowBtn(title);
+    onClickFilterShowBtn(id);
   };
 
   const clickFilterCloseBtn = () => {
-    onClickFilterCloseBtn(title);
+    onClickFilterCloseBtn(id);
   };
 
   return (

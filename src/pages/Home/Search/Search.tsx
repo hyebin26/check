@@ -3,46 +3,26 @@ import SearchFilter from "../../../components/SearchFilter/SearchFilter";
 import styled from "@emotion/styled";
 import { useSearchParams } from "react-router-dom";
 import { useRef } from "react";
+import filterCategory from "../../../assets/data/filterCategory";
 
 function Search() {
-  const [filterCategory, setFilterCategory] = useState([
+  const [activedFilterCategory, setActivedFilterCategory] = useState([
     {
       id: 0,
-      title: "장소",
       active: false,
-      filter: "placeFilter",
-      content: [
-        { contentId: 0, filterTitle: "강남 아지트" },
-        { contentId: 1, filterTitle: "안국 아지트" },
-        { contentId: 2, filterTitle: "온라인" },
-        { contentId: 3, filterTitle: "롯데백화점 잠실점" },
-      ],
     },
     {
       id: 1,
-      title: "클럽유형",
-      filter: "typeFilter",
       active: false,
-      content: [
-        {
-          contentId: 0,
-          filterTitle: "클럽장 클럽",
-          info: "해당 분야의 전문가인 클럽장님이 함께 읽을 책을 선정하고 대화를 이끌어 나갑니다.",
-        },
-        {
-          contentId: 1,
-          filterTitle: "함께 만드는 클럽",
-          info: "클럽장님의 강연으로 구성된 세션을 함께 듣습니다.",
-        },
-      ],
     },
   ]);
-  let [searchParams, setSearchParams] = useSearchParams();
+
+  const [searchParams, setSearchParams] = useSearchParams();
   const searchRef = useRef<HTMLInputElement | null>(null);
 
-  const onClickFilterShowBtn = (title: string) => {
-    const filteredFilterCategory = filterCategory.map((item) => {
-      if (item.title === title && !item.active) {
+  const onClickFilterShowBtn = (id: number) => {
+    const filteredFilterCategory = activedFilterCategory.map((item) => {
+      if (item.id === id && !item.active) {
         return { ...item, active: true };
       }
       if (item.active) {
@@ -50,7 +30,7 @@ function Search() {
       }
       return item;
     });
-    setFilterCategory(filteredFilterCategory);
+    setActivedFilterCategory(filteredFilterCategory);
   };
 
   const onSubmitSearchForm = (event: FormEvent) => {
@@ -65,20 +45,21 @@ function Search() {
     setSearchParams(searchParams);
   };
 
-  const onClickFilterCloseBtn = (title: string) => {
-    const filteredFilterCategory = filterCategory.map((item) => {
-      if (item.title === title) {
+  const onClickFilterCloseBtn = (id: number) => {
+    const filteredFilterCategory = activedFilterCategory.map((item) => {
+      if (item.id === id) {
         return { ...item, active: false };
       }
       return item;
     });
-    setFilterCategory(filteredFilterCategory);
+    setActivedFilterCategory(filteredFilterCategory);
   };
+
   const onClickInitializationBtn = () => {
     for (let filter of Array.from(searchParams.keys())) {
       searchParams.delete(filter);
     }
-    setFilterCategory((prev) => {
+    setActivedFilterCategory((prev) => {
       return prev.map((item) => {
         if (item.active) {
           return { ...item, active: false };
@@ -105,7 +86,8 @@ function Search() {
           {filterCategory.map((item) => (
             <SearchFilter
               key={item.id}
-              active={item.active}
+              id={item.id}
+              active={activedFilterCategory[item.id].active}
               title={item.title}
               content={item.content}
               filter={item.filter}
